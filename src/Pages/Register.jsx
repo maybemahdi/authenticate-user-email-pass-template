@@ -9,6 +9,7 @@ import {
 } from "firebase/auth";
 import { auth } from "../firebase.config";
 import { AuthContext } from "../Components/AuthProvider";
+import toast from "react-hot-toast";
 
 
 const Register = () => {
@@ -40,6 +41,7 @@ const Register = () => {
       .then((res) => {
         console.log(res.user);
         setRegistered("User Created Successfully");
+        toast.success("User Created Successfully")
         
         //update profile
         updateProfile(res.user, {
@@ -47,13 +49,14 @@ const Register = () => {
           photoURL: "https://example.com/jane-q-user/profile.jpg"
         })
         .then(()=> {
-            alert('Profile Updated')
+            toast.success("Profile Updated")
         })
         .catch(err => console.log(err))
         //verify user
         sendEmailVerification(res.user)
           .then(() => {
             setRegistered(`A Verification Email was sent to ${email}`);
+            toast.success('Verification Email sent')
           })
           .catch((err) => console.log(err));
       })

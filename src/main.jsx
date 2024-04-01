@@ -7,6 +7,9 @@ import Home from "./Pages/Home.jsx";
 import Login from "./Pages/Login.jsx";
 import Register from "./Pages/Register.jsx";
 import AuthProvider from "./Components/AuthProvider.jsx";
+import Orders from "./Pages/Orders.jsx";
+import PrivateRoute from "./Components/PrivateRoute.jsx";
+import { Toaster } from "react-hot-toast";
 
 const router = createBrowserRouter([
   {
@@ -25,6 +28,14 @@ const router = createBrowserRouter([
         path: "/register",
         element: <Register />,
       },
+      {
+        path: "/orders",
+        element: (
+          <PrivateRoute>
+            <Orders/>
+          </PrivateRoute>
+        ),
+      },
     ],
   },
 ]);
@@ -34,5 +45,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
     <AuthProvider>
       <RouterProvider router={router}></RouterProvider>
     </AuthProvider>
+    <Toaster/>
   </React.StrictMode>
 );

@@ -8,6 +8,7 @@ import { FaRegEyeSlash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { auth } from "../firebase.config";
 import { AuthContext } from "../Components/AuthProvider";
+import toast from "react-hot-toast";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -42,8 +43,9 @@ const Login = () => {
       .then((result) => {
         console.log(result.user);
         setLogged("Logged in successfully");
+        toast.success("Logged in successfully")
         if (!result.user.emailVerified) {
-          alert("Please Verify Your Email");
+          toast.success("Please Verify Your Email");
         }
       })
       .catch((err) => {
@@ -55,6 +57,7 @@ const Login = () => {
         //     ? errorMessage.substring(colonIndex + 1).trim()
         //     : errorMessage;
         setError(errorMessage);
+        toast.error(errorMessage);
       });
   };
   const handleForgetPassword = () => {
@@ -67,8 +70,8 @@ const Login = () => {
       return;
     }
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-      console.log("Please provide a valid email address");
       setForgetError("Please provide a valid email address");
+      toast.error("Please provide a valid email address");
       return;
     }
     console.log("send reset email", email);
@@ -76,6 +79,7 @@ const Login = () => {
       .then(() => {
         setForgetError("");
         setSuccessForget(`A password reset email was sent to: ${email}`);
+        toast.success("Password reset Email was sent");
       })
       .catch((err) => setForgetError(err));
   };
@@ -131,8 +135,14 @@ const Login = () => {
             </button>
           </form>
           <div>
-            {error && <p className="text-red-500 font-semibold">{error}</p>}
-            {logged && <p className="text-green-500 font-semibold">{logged}</p>}
+            {error && (
+              <p className="text-red-500 font-semibold">{error}</p>
+            )}
+            {logged && (
+              <p className="text-green-500 font-semibold">
+                {logged}
+              </p>
+            )}
           </div>
         </div>
 

@@ -1,13 +1,14 @@
 import { useContext } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
+import toast from "react-hot-toast";
 
 const Nav = () => {
   const { user, logOut } = useContext(AuthContext);
   const handleLogOut = () => {
     logOut()
       .then(() => {
-        alert("logged out successful");
+        toast.success("logged out successful");
       })
       .catch((err) => console.log(err));
   };
@@ -21,6 +22,9 @@ const Nav = () => {
       </li>
       <li>
         <NavLink to={"/register"}>Register</NavLink>
+      </li>
+      <li>
+        <NavLink to={"/orders"}>Orders</NavLink>
       </li>
     </>
   );
