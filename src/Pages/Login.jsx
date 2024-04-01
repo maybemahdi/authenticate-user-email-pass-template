@@ -1,7 +1,4 @@
-import {
-  signInWithEmailAndPassword,
-  sendPasswordResetEmail,
-} from "firebase/auth";
+import { sendPasswordResetEmail } from "firebase/auth";
 import { useContext, useRef, useState } from "react";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
@@ -17,7 +14,7 @@ const Login = () => {
   const [forgetError, setForgetError] = useState("");
   const [successForget, setSuccessForget] = useState("");
   const emailRef = useRef(null);
-  const { signInUser } = useContext(AuthContext);
+  const { signInUser, googleSignIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
   const handleFirebaseError = (errorCode) => {
@@ -28,6 +25,14 @@ const Login = () => {
       default:
         return "An error occurred. Please try again later.";
     }
+  };
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+    .then(res=> {
+      console.log(res)
+      toast.success('logged in successfully')
+    })
+    .catch(err => console.log(err))
   };
   const handleLogin = (e) => {
     e.preventDefault();
@@ -137,12 +142,19 @@ const Login = () => {
               Login
             </button>
           </form>
+          <div className="flex items-center justify-center my-3">
+            <button
+              onClick={handleGoogleSignIn}
+              className="btn btn-ghost bg-secondary w-full"
+            >
+              Sign in with Google
+            </button>
+          </div>
           <div>
             {error && <p className="text-red-500 font-semibold">{error}</p>}
             {logged && <p className="text-green-500 font-semibold">{logged}</p>}
           </div>
         </div>
-
         <div className="text-grey-dark mt-6">
           New to our Website?
           <Link

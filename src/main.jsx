@@ -10,6 +10,7 @@ import AuthProvider from "./Components/AuthProvider.jsx";
 import Orders from "./Pages/Orders.jsx";
 import PrivateRoute from "./Components/PrivateRoute.jsx";
 import { Toaster } from "react-hot-toast";
+import Profile from "./Pages/Profile.jsx";
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
           </PrivateRoute>
         ),
       },
+      {
+        path: '/profile',
+        element: <Profile/>
+      }
     ],
   },
 ]);

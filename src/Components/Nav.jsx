@@ -1,14 +1,16 @@
 import { useContext } from "react";
-import { Link, NavLink } from "react-router-dom";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import { AuthContext } from "./AuthProvider";
 import toast from "react-hot-toast";
 
 const Nav = () => {
   const { user, logOut } = useContext(AuthContext);
+  const navigate = useNavigate();
   const handleLogOut = () => {
     logOut()
       .then(() => {
         toast.success("logged out successful");
+        navigate("/");
       })
       .catch((err) => console.log(err));
   };
@@ -26,6 +28,11 @@ const Nav = () => {
       <li>
         <NavLink to={"/orders"}>Orders</NavLink>
       </li>
+      {user && (
+        <li>
+          <NavLink to={"/profile"}>Profile</NavLink>
+        </li>
+      )}
     </>
   );
   return (
@@ -55,7 +62,7 @@ const Nav = () => {
             {links}
           </ul>
         </div>
-        <a className="btn btn-ghost text-xl">Authentication</a>
+        <Link to={'/'} className="btn btn-ghost text-xl">Authentication</Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu gap-5 font-semibold menu-horizontal px-1">
@@ -66,13 +73,16 @@ const Nav = () => {
         {user ? (
           <>
             <span>{user.email}</span>
-            <button  onClick={handleLogOut} className="btn-ghost bg-green-500 btn">Sign Out</button>
+            <button
+              onClick={handleLogOut}
+              className="btn-ghost bg-green-500 btn"
+            >
+              Sign Out
+            </button>
           </>
         ) : (
           <Link to={"/login"}>
-            <button className="btn-ghost bg-green-500 btn">
-              Login
-            </button>
+            <button className="btn-ghost bg-green-500 btn">Login</button>
           </Link>
         )}
       </div>

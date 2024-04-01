@@ -7,7 +7,6 @@ import {
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
-import { auth } from "../firebase.config";
 import { AuthContext } from "../Components/AuthProvider";
 import toast from "react-hot-toast";
 
@@ -15,9 +14,17 @@ const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [registered, setRegistered] = useState("");
   const [error, setError] = useState("");
-  const { createUser } = useContext(AuthContext);
+  const { createUser, googleSignIn } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const handleGoogleSignIn = () => {
+    googleSignIn()
+    .then(res=> {
+      console.log(res)
+      toast.success('Signed Up successfully')
+    })
+    .catch(err => console.log(err))
+  }
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -130,6 +137,14 @@ const Register = () => {
               Create Account
             </button>
           </form>
+          <div className="flex items-center justify-center my-3">
+            <button
+              onClick={handleGoogleSignIn}
+              className="btn btn-ghost bg-secondary w-full"
+            >
+              Sign Up with Google
+            </button>
+            </div>
           <div>
             {error && <p className="text-red-500 font-semibold">{error}</p>}
             {registered && (
