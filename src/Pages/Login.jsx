@@ -2,11 +2,12 @@ import {
   signInWithEmailAndPassword,
   sendPasswordResetEmail,
 } from "firebase/auth";
-import { useRef, useState } from "react";
+import { useContext, useRef, useState } from "react";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { Link } from "react-router-dom";
 import { auth } from "../firebase.config";
+import { AuthContext } from "../Components/AuthProvider";
 
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,6 +16,7 @@ const Login = () => {
   const [forgetError, setForgetError] = useState("");
   const [successForget, setSuccessForget] = useState("");
   const emailRef = useRef(null);
+  const { signInUser } = useContext(AuthContext);
 
   const handleFirebaseError = (errorCode) => {
     switch (errorCode) {
@@ -35,7 +37,8 @@ const Login = () => {
     //reset error or success message
     setLogged("");
     setError("");
-    signInWithEmailAndPassword(auth, email, password)
+    // signInWithEmailAndPassword(auth, email, password)
+    signInUser(email, password)
       .then((result) => {
         console.log(result.user);
         setLogged("Logged in successfully");

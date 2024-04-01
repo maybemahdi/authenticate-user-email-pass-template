@@ -1,16 +1,26 @@
-import { NavLink } from "react-router-dom";
+import { useContext } from "react";
+import { Link, NavLink } from "react-router-dom";
+import { AuthContext } from "./AuthProvider";
 
 const Nav = () => {
+  const { user, logOut } = useContext(AuthContext);
+  const handleLogOut = () => {
+    logOut()
+      .then(() => {
+        alert("logged out successful");
+      })
+      .catch((err) => console.log(err));
+  };
   const links = (
     <>
       <li>
-        <NavLink to={'/'}>Home</NavLink>
+        <NavLink to={"/"}>Home</NavLink>
       </li>
       <li>
-        <NavLink to={'/login'}>Login</NavLink>
+        <NavLink to={"/login"}>Login</NavLink>
       </li>
       <li>
-        <NavLink to={'/register'}>Register</NavLink>
+        <NavLink to={"/register"}>Register</NavLink>
       </li>
     </>
   );
@@ -43,8 +53,24 @@ const Nav = () => {
         </div>
         <a className="btn btn-ghost text-xl">Authentication</a>
       </div>
-      <div className="navbar-end hidden lg:flex">
-        <ul className="menu gap-5 font-semibold menu-horizontal px-1">{links}</ul>
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu gap-5 font-semibold menu-horizontal px-1">
+          {links}
+        </ul>
+      </div>
+      <div className="navbar-end gap-5">
+        {user ? (
+          <>
+            <span>{user.email}</span>
+            <button  onClick={handleLogOut} className="btn-ghost bg-green-500 btn">Sign Out</button>
+          </>
+        ) : (
+          <Link to={"/login"}>
+            <button className="btn-ghost bg-green-500 btn">
+              Login
+            </button>
+          </Link>
+        )}
       </div>
     </div>
   );
