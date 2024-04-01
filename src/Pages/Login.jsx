@@ -5,7 +5,7 @@ import {
 import { useContext, useRef, useState } from "react";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
-import { Link } from "react-router-dom";
+import { Link, Navigate, useNavigate } from "react-router-dom";
 import { auth } from "../firebase.config";
 import { AuthContext } from "../Components/AuthProvider";
 import toast from "react-hot-toast";
@@ -18,6 +18,7 @@ const Login = () => {
   const [successForget, setSuccessForget] = useState("");
   const emailRef = useRef(null);
   const { signInUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleFirebaseError = (errorCode) => {
     switch (errorCode) {
@@ -43,9 +44,11 @@ const Login = () => {
       .then((result) => {
         console.log(result.user);
         setLogged("Logged in successfully");
-        toast.success("Logged in successfully")
+        toast.success("Logged in successfully");
+        e.target.reset();
+        navigate("/");
         if (!result.user.emailVerified) {
-          toast.success("Please Verify Your Email");
+          toast.error("Please Verify Your Email");
         }
       })
       .catch((err) => {
@@ -135,14 +138,8 @@ const Login = () => {
             </button>
           </form>
           <div>
-            {error && (
-              <p className="text-red-500 font-semibold">{error}</p>
-            )}
-            {logged && (
-              <p className="text-green-500 font-semibold">
-                {logged}
-              </p>
-            )}
+            {error && <p className="text-red-500 font-semibold">{error}</p>}
+            {logged && <p className="text-green-500 font-semibold">{logged}</p>}
           </div>
         </div>
 

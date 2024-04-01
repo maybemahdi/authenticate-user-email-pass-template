@@ -1,4 +1,4 @@
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
 import { useContext, useState } from "react";
@@ -11,12 +11,12 @@ import { auth } from "../firebase.config";
 import { AuthContext } from "../Components/AuthProvider";
 import toast from "react-hot-toast";
 
-
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [registered, setRegistered] = useState("");
   const [error, setError] = useState("");
   const { createUser } = useContext(AuthContext);
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -41,22 +41,23 @@ const Register = () => {
       .then((res) => {
         console.log(res.user);
         setRegistered("User Created Successfully");
-        toast.success("User Created Successfully")
-        
+        toast.success("User Created Successfully");
+        navigate("/");
+
         //update profile
         updateProfile(res.user, {
           displayName: name,
-          photoURL: "https://example.com/jane-q-user/profile.jpg"
+          photoURL: "https://example.com/jane-q-user/profile.jpg",
         })
-        .then(()=> {
-            toast.success("Profile Updated")
-        })
-        .catch(err => console.log(err))
+          .then(() => {
+            toast.success("Profile Updated");
+          })
+          .catch((err) => console.log(err));
         //verify user
         sendEmailVerification(res.user)
           .then(() => {
             setRegistered(`A Verification Email was sent to ${email}`);
-            toast.success('Verification Email sent')
+            toast.success("Verification Email sent");
           })
           .catch((err) => console.log(err));
       })
