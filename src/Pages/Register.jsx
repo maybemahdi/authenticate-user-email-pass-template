@@ -1,18 +1,22 @@
 import { Link } from "react-router-dom";
-import { FaRegEye, FaVolumeHigh } from "react-icons/fa6";
+import { FaRegEye } from "react-icons/fa6";
 import { FaRegEyeSlash } from "react-icons/fa6";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import {
   createUserWithEmailAndPassword,
   sendEmailVerification,
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase.config";
+import { AuthContext } from "../Components/AuthProvider";
+
 
 const Register = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [registered, setRegistered] = useState("");
   const [error, setError] = useState("");
+  const { createUser } = useContext(AuthContext);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     const name = e.target.name.value;
@@ -31,7 +35,8 @@ const Register = () => {
       return setError("Password must have at least one uppercase letter");
     }
 
-    createUserWithEmailAndPassword(auth, email, password)
+    // createUserWithEmailAndPassword(auth, email, password)
+    createUser(email, password)
       .then((res) => {
         console.log(res.user);
         setRegistered("User Created Successfully");
